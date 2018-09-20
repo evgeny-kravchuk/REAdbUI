@@ -1,0 +1,9 @@
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\DatabaseLayer\bin\Debug\DatabaseLayer.dll
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\DatabaseLayer\bin\Debug\DatabaseLayer.pdb
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\DatabaseLayer\bin\Debug\Npgsql.dll
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\DatabaseLayer\bin\Debug\Objects.dll
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\DatabaseLayer\bin\Debug\Objects.pdb
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\DatabaseLayer\bin\Debug\Npgsql.xml
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\DatabaseLayer\obj\Debug\DatabaseLayer.csprojResolveAssemblyReference.cache
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\DatabaseLayer\obj\Debug\DatabaseLayer.dll
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\DatabaseLayer\obj\Debug\DatabaseLayer.pdb
