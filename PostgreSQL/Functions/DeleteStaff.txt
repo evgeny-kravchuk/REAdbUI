@@ -1,0 +1,20 @@
+﻿/*SELECT * FROM readb.delete_staff (12)*/
+CREATE OR REPLACE FUNCTION readb.delete_staff ("id" INT) 
+RETURNS TABLE("log" TEXT)
+
+AS $$
+DECLARE	"temp_login" TEXT;
+BEGIN
+	SELECT 	"Login" INTO "temp_login"
+	FROM 	readb."Staff"
+	WHERE 	"id_employee" = "id";
+
+	DELETE FROM readb."Staff" WHERE "id_employee" = "id";
+
+	DELETE FROM login."DBUsers" WHERE Login = "temp_login";
+	
+	RETURN QUERY
+		SELECT 	"Login"
+		FROM	readb."Staff";
+	END; 
+$$ LANGUAGE plpgsql;

@@ -1,0 +1,15 @@
+loginrea - DqJB3wjN7j/TWKLBAK15xg==		11111 - 42JjUroTh4w=
+adminrea - GKzXQPUYmkLTWKLBAK15xg==		22222 - UfLaMeyA8i4=
+staffrea - cP/kazIB0rbTWKLBAK15xg==		33333 - 2Qkz2dHO4Rw=
+clientrea - uPv8EKCkZahrf7Zb1AJIrg==		44444 - Przqv06aDPE=
+
+127.0.0.1 - YoxAOxKdOqglsLulno11ew==
+5432 - OdmJZCmSBYQ=
+REA - IL5kSQdF1h4=
+
+SecretKey = Yevhenii Kravchuk REA
+
+
+
+
+

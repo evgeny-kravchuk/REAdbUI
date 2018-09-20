@@ -1,0 +1,169 @@
+GRANT ALL ON TABLE REAdb."Clients" TO adminREA;
+
+GRANT SELECT ON TABLE REAdb."Clients" TO staffREA;
+GRANT INSERT ON TABLE REAdb."Clients" TO staffREA;
+GRANT UPDATE ON TABLE REAdb."Clients" TO staffREA;
+
+GRANT UPDATE("PhoneNumber") ON TABLE REAdb."Clients" TO clientREA;
+GRANT UPDATE("Name")    ON TABLE REAdb."Clients" TO clientREA;
+GRANT UPDATE("Login")    ON TABLE REAdb."Clients" TO clientREA;
+GRANT SELECT ON TABLE REAdb."Clients" TO clientREA;
+
+GRANT ALL ON TABLE REAdb."Clients" TO loginREA;
+GRANT UPDATE ON SEQUENCE REAdb."Clients_id_client_seq" TO loginREA;
+
+---------------------------------------------------------------------------------
+
+GRANT ALL ON TABLE REAdb."Objects" TO adminREA;
+
+GRANT SELECT ON TABLE REAdb."Objects" TO staffREA;
+GRANT INSERT ON TABLE REAdb."Objects" TO staffREA;
+GRANT UPDATE ON TABLE REAdb."Objects" TO staffREA;
+GRANT DELETE ON TABLE REAdb."Objects" TO staffREA;
+GRANT UPDATE ON SEQUENCE REAdb."Objects_id_object_seq" TO staffREA;
+
+GRANT UPDATE("Address") ON TABLE REAdb."Objects" TO clientREA;
+GRANT UPDATE("Type") ON TABLE REAdb."Objects" TO clientREA;
+GRANT UPDATE("Price") ON TABLE REAdb."Objects" TO clientREA;
+GRANT SELECT ON TABLE REAdb."Objects" TO clientREA;
+
+---------------------------------------------------------------------------------
+
+GRANT ALL ON TABLE REAdb."Positions" TO adminREA;
+
+GRANT SELECT ON TABLE REAdb."Positions" TO staffREA;
+
+---------------------------------------------------------------------------------
+
+GRANT ALL ON TABLE REAdb."Staff" TO adminREA;
+
+GRANT SELECT ON TABLE REAdb."Staff" TO staffREA;
+GRANT UPDATE("Login") ON TABLE REAdb."Staff" TO staffREA;
+GRANT UPDATE("Name") ON TABLE REAdb."Staff" TO staffREA;
+GRANT UPDATE("PhoneNumber") ON TABLE REAdb."Staff" TO staffREA;
+GRANT UPDATE("Sex") ON TABLE REAdb."Staff" TO staffREA;
+GRANT UPDATE("DateOfBirth") ON TABLE REAdb."Staff" TO staffREA;
+
+GRANT SELECT ON TABLE REAdb."Staff" TO clientREA;
+
+GRANT INSERT ON TABLE REAdb."Staff" TO loginREA;
+GRANT UPDATE ON SEQUENCE REAdb."Staff_id_employee_seq" TO loginREA;
+
+---------------------------------------------------------------------------------
+
+GRANT ALL ON TABLE REAdb."Contracts" TO adminREA;
+
+GRANT SELECT ON TABLE REAdb."Contracts" TO staffREA;
+GRANT INSERT ON TABLE REAdb."Contracts" TO staffREA;
+GRANT UPDATE ON TABLE REAdb."Contracts" TO staffREA;
+GRANT UPDATE ON SEQUENCE REAdb."Contracts_id_contract_seq" TO staffREA;
+
+GRANT SELECT ON TABLE REAdb."Contracts" TO clientREA;
+
+---------------------------------------------------------------------------------
+
+GRANT ALL ON TABLE REAdb."DesiredObjects" TO adminREA;
+
+GRANT SELECT ON TABLE REAdb."DesiredObjects" TO staffREA;
+GRANT INSERT ON TABLE REAdb."DesiredObjects" TO staffREA;
+GRANT UPDATE ON TABLE REAdb."DesiredObjects" TO staffREA;
+GRANT DELETE ON TABLE REAdb."DesiredObjects" TO staffREA;
+GRANT UPDATE ON SEQUENCE REAdb."DesiredObjects_id_desiredObject_seq" TO staffREA;
+
+GRANT SELECT ON TABLE REAdb."DesiredObjects" TO clientREA;
+GRANT INSERT ON TABLE REAdb."DesiredObjects" TO clientREA;
+GRANT UPDATE ON TABLE REAdb."DesiredObjects" TO clientREA;
+
+---------------------------------------------------------------------------------
+
+GRANT ALL ON TABLE REAdb."Flat" TO adminREA;
+
+GRANT SELECT ON TABLE REAdb."Flat" TO staffREA;
+GRANT INSERT ON TABLE REAdb."Flat" TO staffREA;
+GRANT UPDATE ON TABLE REAdb."Flat" TO staffREA;
+GRANT DELETE ON TABLE REAdb."Flat" TO staffREA;
+
+GRANT UPDATE("Address") ON TABLE REAdb."Flat" TO clientREA;
+GRANT UPDATE("Type") ON TABLE REAdb."Flat" TO clientREA;
+GRANT UPDATE("Price") ON TABLE REAdb."Flat" TO clientREA;
+GRANT UPDATE("Area") ON TABLE REAdb."Flat" TO clientREA;
+GRANT UPDATE("Room") ON TABLE REAdb."Flat" TO clientREA;
+GRANT UPDATE("Floor") ON TABLE REAdb."Flat" TO clientREA;
+GRANT UPDATE("Status") ON TABLE REAdb."Flat" TO clientREA;
+GRANT SELECT ON TABLE REAdb."Flat" TO clientREA;
+
+---------------------------------------------------------------------------------
+
+GRANT ALL ON TABLE REAdb."House" TO adminREA;
+
+GRANT SELECT ON TABLE REAdb."House" TO staffREA;
+GRANT INSERT ON TABLE REAdb."House" TO staffREA;
+GRANT UPDATE ON TABLE REAdb."House" TO staffREA;
+GRANT DELETE ON TABLE REAdb."House" TO staffREA;
+
+GRANT UPDATE("Address") ON TABLE REAdb."House" TO clientREA;
+GRANT UPDATE("Type") ON TABLE REAdb."House" TO clientREA;
+GRANT UPDATE("Price") ON TABLE REAdb."House" TO clientREA;
+GRANT UPDATE("Area") ON TABLE REAdb."House" TO clientREA;
+GRANT UPDATE("Room") ON TABLE REAdb."House" TO clientREA;
+GRANT UPDATE("NumberOfStoreys") ON TABLE REAdb."House" TO clientREA;
+GRANT UPDATE("Status") ON TABLE REAdb."House" TO clientREA;
+GRANT SELECT ON TABLE REAdb."House" TO clientREA;
+
+---------------------------------------------------------------------------------
+
+GRANT ALL ON TABLE REAdb."Plot" TO adminREA;
+
+GRANT SELECT ON TABLE REAdb."Plot" TO staffREA;
+GRANT INSERT ON TABLE REAdb."Plot" TO staffREA;
+GRANT UPDATE ON TABLE REAdb."Plot" TO staffREA;
+GRANT DELETE ON TABLE REAdb."Plot" TO staffREA;
+
+GRANT UPDATE("Address") ON TABLE REAdb."Plot" TO clientREA;
+GRANT UPDATE("Type") ON TABLE REAdb."Plot" TO clientREA;
+GRANT UPDATE("Price") ON TABLE REAdb."Plot" TO clientREA;
+GRANT UPDATE("Area") ON TABLE REAdb."Plot" TO clientREA;
+GRANT UPDATE("Status") ON TABLE REAdb."Plot" TO clientREA;
+GRANT SELECT ON TABLE REAdb."Plot" TO clientREA;
+
+---------------------------------------------------------------------------------
+
+GRANT ALL ON TABLE REAdb."DesiredFlat" TO adminREA;
+
+GRANT SELECT ON TABLE REAdb."DesiredFlat" TO staffREA;
+GRANT INSERT ON TABLE REAdb."DesiredFlat" TO staffREA;
+GRANT UPDATE ON TABLE REAdb."DesiredFlat" TO staffREA;
+GRANT DELETE ON TABLE REAdb."DesiredFlat" TO staffREA;
+
+GRANT SELECT ON TABLE REAdb."DesiredFlat" TO clientREA;
+GRANT INSERT ON TABLE REAdb."DesiredFlat" TO clientREA;
+GRANT UPDATE ON TABLE REAdb."DesiredFlat" TO clientREA;
+GRANT DELETE ON TABLE REAdb."DesiredFlat" TO clientREA;
+
+---------------------------------------------------------------------------------
+
+GRANT ALL ON TABLE REAdb."DesiredHouse" TO adminREA;
+
+GRANT SELECT ON TABLE REAdb."DesiredHouse" TO staffREA;
+GRANT INSERT ON TABLE REAdb."DesiredHouse" TO staffREA;
+GRANT UPDATE ON TABLE REAdb."DesiredHouse" TO staffREA;
+GRANT DELETE ON TABLE REAdb."DesiredHouse" TO staffREA;
+
+GRANT SELECT ON TABLE REAdb."DesiredHouse" TO clientREA;
+GRANT INSERT ON TABLE REAdb."DesiredHouse" TO clientREA;
+GRANT UPDATE ON TABLE REAdb."DesiredHouse" TO clientREA;
+GRANT DELETE ON TABLE REAdb."DesiredHouse" TO clientREA;
+
+---------------------------------------------------------------------------------
+
+GRANT ALL ON TABLE REAdb."DesiredPlot" TO adminREA;
+
+GRANT SELECT ON TABLE REAdb."DesiredPlot" TO staffREA;
+GRANT INSERT ON TABLE REAdb."DesiredPlot" TO staffREA;
+GRANT UPDATE ON TABLE REAdb."DesiredPlot" TO staffREA;
+GRANT DELETE ON TABLE REAdb."DesiredPlot" TO staffREA;
+
+GRANT SELECT ON TABLE REAdb."DesiredPlot" TO clientREA;
+GRANT INSERT ON TABLE REAdb."DesiredPlot" TO clientREA;
+GRANT UPDATE ON TABLE REAdb."DesiredPlot" TO clientREA;
+GRANT DELETE ON TABLE REAdb."DesiredPlot" TO clientREA;

@@ -1,0 +1,355 @@
+CREATE SCHEMA REAdb AUTHORIZATION adminREA;
+
+GRANT ALL   ON SCHEMA REAdb TO adminREA;
+GRANT USAGE ON SCHEMA REAdb TO loginREA;
+GRANT USAGE ON SCHEMA REAdb TO staffREA;
+GRANT USAGE ON SCHEMA REAdb TO clientREA;
+
+---------------------------------------------------------------------------------
+
+CREATE DOMAIN REAdb."type" AS TEXT
+	CHECK (VALUE IN ('Квартира','Дом','Участок'));
+ALTER DOMAIN REAdb."type" OWNER TO adminREA;
+
+CREATE DOMAIN REAdb."sex" AS TEXT
+	CHECK (VALUE IN ('Мужской','Женский'));
+ALTER DOMAIN REAdb."sex" OWNER TO adminREA;
+
+CREATE DOMAIN REAdb."staff_position" AS TEXT
+	CHECK (VALUE IN ('Директор','Менеджер','Риелтор'));
+ALTER DOMAIN REAdb."staff_position" OWNER TO adminREA;
+
+CREATE DOMAIN REAdb."contract_type" AS TEXT
+	CHECK (VALUE IN ('Аренда','Продажа'));
+ALTER DOMAIN REAdb."contract_type" OWNER TO adminREA;
+
+CREATE DOMAIN REAdb."home_status" AS TEXT
+	CHECK (VALUE IN ('После ремонта','Хорошее','Требуется ремонт'));
+ALTER DOMAIN REAdb."home_status" OWNER TO adminREA;
+
+CREATE DOMAIN REAdb."plot_status" AS TEXT
+	CHECK (VALUE IN ('Без строений','Есть строения'));
+ALTER DOMAIN REAdb."plot_status" OWNER TO adminREA;
+
+CREATE DOMAIN REAdb."hood" AS TEXT
+	CHECK (VALUE IN ('Приморский','Киевский','Малиновский','Суворовский'));
+ALTER DOMAIN REAdb."hood" OWNER TO adminREA;
+
+---------------------------------------------------------------------------------
+
+CREATE TYPE REAdb."address" AS (
+	"PostCode"	CHAR(5),
+	"City"		TEXT,
+	"Hood"		REAdb.hood,
+	"Street"	TEXT,
+	"HouseNumber"	INT,
+	"FlatNumber"	INT
+	);
+CREATE TYPE REAdb."fullname" AS (
+	"LastName"	TEXT,
+	"FirstName"	TEXT,
+	"Patronymic"	TEXT
+	);
+
+---------------------------------------------------------------------------------
+
+CREATE TABLE REAdb."Clients" (
+	"id_client"	SERIAL		NOT NULL	PRIMARY KEY,
+	"Login"		TEXT		NOT NULL	REFERENCES login."DBUsers" ON UPDATE CASCADE,
+	"Name"		REAdb.fullname	NOT NULL,
+	"PhoneNumber"	CHAR(16)	NOT NULL	CHECK ("PhoneNumber" SIMILAR TO '\+380 {1}[0-9]{2} {1}[0-9]{3} {1}[0-9]{4}')
+	);
+ALTER TABLE REAdb."Clients" OWNER TO adminREA;
+
+CREATE TABLE REAdb."Objects" (
+	"id_object"	SERIAL		NOT NULL	PRIMARY KEY,
+	"id_owner"	INT		NOT NULL	REFERENCES REAdb."Clients",
+	"Address"	REAdb.address	NOT NULL,
+	"Type"		REAdb.type	NOT NULL,
+	"Price"		FLOAT		NOT NULL	CHECK ("Price" > 0)
+	);
+ALTER TABLE REAdb."Objects" OWNER TO adminREA;
+
+CREATE TABLE REAdb."Positions" (
+	"Position"	REAdb.staff_position	NOT NULL	PRIMARY KEY,
+	"Salary"	FLOAT			NOT NULL
+	);
+ALTER TABLE REAdb."Positions" OWNER TO adminREA;
+
+CREATE TABLE REAdb."Staff" (
+	"id_employee"	SERIAL		NOT NULL	PRIMARY KEY,
+	"Login"		TEXT		NOT NULL	REFERENCES login."DBUsers" ON UPDATE CASCADE,
+	"Name"		REAdb.fullname	NOT NULL,
+	"PhoneNumber"	CHAR(16)	NOT NULL	CHECK ("PhoneNumber" SIMILAR TO '\+380 {1}[0-9]{2} {1}[0-9]{3} {1}[0-9]{4}'),
+	"Sex"		REAdb.sex	NOT NULL,
+	"DateOfBirth"	DATE		NOT NULL,
+	"Position"	TEXT		NOT NULL	REFERENCES REAdb."Positions"
+	);
+ALTER TABLE REAdb."Staff" OWNER TO adminREA;
+
+CREATE TABLE REAdb."Contracts" (
+	"id_contract"	SERIAL			NOT NULL	PRIMARY KEY,
+	"id_employee"	INT			NOT NULL	REFERENCES REAdb."Staff",
+	"id_object"	INT			NOT NULL	REFERENCES REAdb."Objects",
+	"id_client"	INT			NOT NULL	REFERENCES REAdb."Clients",
+	"id_owner"	INT			NOT NULL	REFERENCES REAdb."Clients",
+	"StartDate"	DATE			NOT NULL,
+	"FinishDate"	DATE			NOT NULL,
+	"ContractType"	REAdb.contract_type	NOT NULL,
+	"Price"		FLOAT			NOT NULL,
+	CHECK ("StartDate" <= "FinishDate"),
+	UNIQUE ("id_employee","id_object","id_client","id_owner","StartDate")
+	);
+ALTER TABLE REAdb."Contracts" OWNER TO adminREA;
+
+CREATE TABLE REAdb."DesiredObjects" (
+	"id_desiredObject"	SERIAL			NOT NULL	PRIMARY KEY,
+	"id_client"		INT			NOT NULL	REFERENCES REAdb."Clients",
+	"City"			TEXT			NOT NULL,
+	"Hood"			REAdb.hood,
+	"Street"		TEXT,
+	"Type"			REAdb.type		NOT NULL,
+	"Price"			FLOAT			CHECK ("Price" > 0)
+	);
+ALTER TABLE REAdb."DesiredObjects" OWNER TO adminREA;
+
+---------------------------------------------------------------------------------
+	
+CREATE TABLE REAdb."Flat" (
+	"Area"		INT			NOT NULL,
+	"Room"		INT			NOT NULL	CHECK ("Room" > 0 AND "Room" <= 10),
+	"Floor"		INT			NOT NULL	CHECK ("Floor" > 0 AND "Floor" <= 162),
+	"Status"	REAdb.home_status	NOT NULL
+	)  
+	INHERITS (REAdb."Objects");
+ALTER TABLE REAdb."Flat" OWNER TO adminREA;
+
+CREATE TABLE REAdb."House" (
+	"Area"			INT			NOT NULL,
+	"Room"			INT			NOT NULL	CHECK ("Room" > 0 AND "Room" <= 10),
+	"NumberOfStoreys"	INT			NOT NULL	CHECK ("NumberOfStoreys" > 0 AND "NumberOfStoreys" <= 5),
+	"Status"		REAdb.home_status	NOT NULL
+	)  
+	INHERITS (REAdb."Objects");
+ALTER TABLE REAdb."House" OWNER TO adminREA;
+
+CREATE TABLE REAdb."Plot" (
+	"Area"			INT			NOT NULL,
+	"Status"		REAdb.plot_status	NOT NULL
+	)  
+	INHERITS (REAdb."Objects");
+ALTER TABLE REAdb."Plot" OWNER TO adminREA;
+
+---------------------------------------------------------------------------------
+	
+CREATE TABLE REAdb."DesiredFlat" (
+	"Area"		INT,
+	"Room"		INT			CHECK ("Room" > 0 AND "Room" <= 10),
+	"Floor"		INT			CHECK ("Floor" > 0 AND "Floor" <= 162),
+	"Status"	REAdb.home_status
+	)  
+	INHERITS (REAdb."DesiredObjects");
+ALTER TABLE REAdb."DesiredFlat" OWNER TO adminREA;
+
+CREATE TABLE REAdb."DesiredHouse" (
+	"Area"			INT,
+	"Room"			INT			CHECK ("Room" > 0 AND "Room" <= 10),
+	"NumberOfStoreys"	INT			CHECK ("NumberOfStoreys" > 0 AND "NumberOfStoreys" <= 5),
+	"Status"		REAdb.home_status
+	)  
+	INHERITS (REAdb."DesiredObjects");
+ALTER TABLE REAdb."DesiredHouse" OWNER TO adminREA;
+
+CREATE TABLE REAdb."DesiredPlot" (
+	"Area"			INT,
+	"Status"		REAdb.plot_status
+	)  
+	INHERITS (REAdb."DesiredObjects");
+ALTER TABLE REAdb."DesiredPlot" OWNER TO adminREA;
+
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION REAdb.desiredObjects_insert()
+	RETURNS  TRIGGER
+	AS $$
+	BEGIN
+		INSERT INTO REAdb."DesiredObjects"("id_desiredObject","id_client","City","Hood","Street","Type","Price") VALUES
+		(NEW."id_desiredObject",NEW."id_client",NEW."City",NEW."Hood",NEW."Street",NEW."Type",NEW."Price");
+			
+		RETURN NEW;
+	END; 
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER TR_desiredFlat_insert
+BEFORE INSERT ON REAdb."DesiredFlat"
+FOR EACH ROW EXECUTE PROCEDURE REAdb.desiredObjects_insert();
+
+CREATE TRIGGER TR_desiredHouse_insert
+BEFORE INSERT ON REAdb."DesiredHouse"
+FOR EACH ROW EXECUTE PROCEDURE REAdb.desiredObjects_insert();
+
+CREATE TRIGGER TR_desiredPlot_insert
+BEFORE INSERT ON REAdb."DesiredPlot"
+FOR EACH ROW EXECUTE PROCEDURE REAdb.desiredObjects_insert();
+
+---------------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION REAdb.Objects_insert()
+	RETURNS  TRIGGER
+	AS $$
+	BEGIN
+		INSERT INTO REAdb."Objects"("id_object","id_owner","Address","Type","Price") VALUES
+		(NEW."id_object",NEW."id_owner",NEW."Address",NEW."Type",NEW."Price");
+			
+		RETURN NEW;
+	END; 
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER TR_Flat_insert
+BEFORE INSERT ON REAdb."Flat"
+FOR EACH ROW EXECUTE PROCEDURE REAdb.Objects_insert();
+
+CREATE TRIGGER TR_House_insert
+BEFORE INSERT ON REAdb."House"
+FOR EACH ROW EXECUTE PROCEDURE REAdb.Objects_insert();
+
+CREATE TRIGGER TR_Plot_insert
+BEFORE INSERT ON REAdb."Plot"
+FOR EACH ROW EXECUTE PROCEDURE REAdb.Objects_insert();
+
+---------------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION REAdb.desiredObjects_delete()
+	RETURNS  TRIGGER
+	AS $$
+	BEGIN	
+		DELETE FROM REAdb."DesiredObjects" WHERE "id_desiredObject" = OLD."id_desiredObject";
+			
+		RETURN NEW;
+	END; 
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER TR_desiredFlat_delete
+AFTER DELETE ON REAdb."DesiredFlat"
+FOR EACH ROW EXECUTE PROCEDURE REAdb.desiredObjects_delete();
+
+CREATE TRIGGER TR_desiredHouse_delete
+AFTER DELETE ON REAdb."DesiredHouse"
+FOR EACH ROW EXECUTE PROCEDURE REAdb.desiredObjects_delete();
+
+CREATE TRIGGER TR_desiredPlot_delete
+AFTER DELETE ON REAdb."DesiredPlot"
+FOR EACH ROW EXECUTE PROCEDURE REAdb.desiredObjects_delete();
+
+---------------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION REAdb.Objects_delete()
+	RETURNS  TRIGGER
+	AS $$
+	BEGIN
+		DELETE FROM REAdb."Objects" WHERE "id_object" = OLD."id_object";
+			
+		RETURN NEW;
+	END; 
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER TR_Flat_delete
+AFTER DELETE ON REAdb."Flat"
+FOR EACH ROW EXECUTE PROCEDURE REAdb.Objects_delete();
+
+CREATE TRIGGER TR_House_delete
+AFTER DELETE ON REAdb."House"
+FOR EACH ROW EXECUTE PROCEDURE REAdb.Objects_delete();
+
+CREATE TRIGGER TR_Plot_delete
+AFTER DELETE ON REAdb."Plot"
+FOR EACH ROW EXECUTE PROCEDURE REAdb.Objects_delete();
+
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+
+INSERT INTO REAdb."Positions" VALUES
+	('Директор',7500),
+	('Менеджер',5840),
+	('Риелтор',4300);
+
+INSERT INTO REAdb."Staff"("Login","Name","PhoneNumber","Sex","DateOfBirth","Position") VALUES
+	('staff1', '(Кравчук,Евгений,Игоревич)', '+380 99 984 0486', 'Мужской', '20.11.1996', 'Директор'),
+	('staff2', '(Московчук,Елена,Сергеевна)', '+380 50 034 2045', 'Женский', '20.11.1996', 'Менеджер'),
+	('staff3', '(Яковына,Дмитрий,Гаврилович)', '+380 64 785 0558', 'Мужской', '12.10.1995', 'Менеджер'),
+	('staff4', '(Курносик,Дмитрий,Игоревич)', '+380 50 896 1445', 'Мужской', '10.01.1989', 'Менеджер'),
+	('staff5', '(Саливончик,Елена,Сергеевна)', '+380 66 856 4589', 'Женский', '15.05.1991', 'Риелтор'),
+	('staff6', '(Гласюк,Ольга,Сергеевна)', '+380 98 874 7412', 'Женский', '18.03.1992', 'Риелтор'),
+	('staff7', '(Луцык,Тарас,Федорович)', '+380 67 132 1203', 'Мужской', '25.07.1990', 'Риелтор'),
+	('staff8', '(Кожумьяка,Татьяна,Андреевна)', '+380 67 988 1214', 'Женский', '07.04.1989', 'Риелтор'),
+	('staff9', '(Штанько,Иванна,Артемовна)', '+380 96 125 7853', 'Женский', '08.11.1988', 'Риелтор'),
+	('staff10', '(Васиьков,Николай,Филипович)', '+380 66 745 0778', 'Мужской', '20.12.1987', 'Риелтор'),
+	('staff11', '(Основа,Ольга,Васильевна)', '+380 99 784 5589', 'Женский', '03.04.1989', 'Риелтор'),
+	('staff12', '(Галушко,Игорь,Петрович)', '+380 98 120 4589', 'Мужской', '15.02.1990', 'Риелтор'),
+	('staff13', '(Картуз,Анжела,Николаевна)', '+380 50 977 1203', 'Женский', '05.11.1994', 'Риелтор'),
+	('staff14', '(Штейншнайдер,Никита,Андронович)', '+380 50 745 1455', 'Мужской', '08.06.1992', 'Риелтор');
+
+INSERT INTO REAdb."Clients"("Login","Name","PhoneNumber") VALUES
+	('client1', '(Радионов,Гавриил,Федорович)', '+380 66 785 2153'),
+	('client2', '(Федоров,Максим,Иванович)', '+380 50 152 3566'),
+	('client3', '(Курлык,Карина,Максимовна)', '+380 96 548 3215'),
+	('client4', '(Максименко,Кира,Алексеевна)', '+380 97 785 6446'),
+	('client5', '(Космач,Марк,Филипович)', '+380 97 846 6546'),
+	('client6', '(Дутка,Ольга,Васильевна)', '+380 98 789 2456'),
+	('client7', '(Марчук,Екатерина,Александровна)', '+380 99 788 4566'),
+	('client8', '(Олесь,Николай,Гаврилович)', '+380 66 152 1254'),
+	('client9', '(Тигипко,Александр,Сергеевич)', '+380 68 136 7855'),
+	('client10', '(Мыла,Алена,Николаевна)', '+380 50 215 4586');
+
+---------------------------------------------------------------------------------
+	
+INSERT INTO REAdb."Flat"("id_owner","Address","Type","Area","Room","Floor","Status","Price") VALUES
+	(3, '(68420,Одесса,Приморский,Пастера,12,33)', 'Квартира', 65, 2, 3, 'После ремонта', 78500),
+	(5, '(68000,Одесса,Приморский,Среднефонтанская,34,78)', 'Квартира', 42, 2, 5, 'Требуется ремонт', 34000),
+	(9, '(68024,Одесса,Приморский,Дворянская,6,4)', 'Квартира', 128, 4, 2, 'Хорошее', 210500),
+	(4, '(68654,Одесса,Киевский,Генуэзская,3,178)', 'Квартира', 95, 3, 14, 'После ремонта', 185000),
+	(3, '(68220,Одесса,Малиновский,Ришельевская,74,12)', 'Квартира', 24, 1, 1, 'Требуется ремонт', 20000),
+	(3, '(68220,Одесса,Суворовский,Ришельевская,74,11)', 'Квартира', 25, 1, 1, 'Хорошее', 24300);
+
+INSERT INTO REAdb."House"("id_owner","Address","Type","Area","Room","NumberOfStoreys","Status","Price") VALUES
+	(7, '(66523,Одесса,Киевский,Абрикосовная,40,)', 'Дом', 120, 3, 2, 'После ремонта', 263500),
+	(1, '(66000,Одесса,Малиновский,Вишневая,22,)', 'Дом', 98, 2, 1, 'Требуется ремонт', 340000),
+	(3, '(66024,Одесса,Киевский,Беларуская,7,)', 'Дом', 248, 5, 3, 'Хорошее', 785500),
+	(4, '(66654,Одесса,Суворовский,Цветочная,15,)', 'Дом', 175, 3, 2, 'После ремонта', 185000),
+	(1, '(66220,Одесса,Малиновский,Солнечная,14,)', 'Дом', 123, 3, 1, 'Требуется ремонт', 258000),
+	(2, '(66220,Одесса,Суворовский,Солнечная,15,)', 'Дом', 86, 2, 1, 'Хорошее', 243300);
+
+INSERT INTO REAdb."Plot"("id_owner","Address","Type","Area","Status","Price") VALUES
+	(2, '(67523,Одесса,Суворовский,Приграничная,41,)', 'Участок', 4, 'Есть строения', 63500),
+	(4, '(64000,Одесса,Малиновский,Порядочная,28,)', 'Участок', 5, 'Без строений', 340000),
+	(6, '(55024,Одесса,Киевский,Светлая,45,)', 'Участок', 10, 'Есть строения', 785500),
+	(6, '(67645,Одесса,Суворовский,Парковая,178,)', 'Участок', 3, 'Есть строения', 185000),
+	(8, '(67420,Одесса,Киевский,Ковалевского,11,)', 'Участок', 5, 'Без строений', 58000),
+	(9, '(67220,Одесса,Малиновский,Ковалевского,17,)', 'Участок', 6, 'Без строений', 43300);
+
+---------------------------------------------------------------------------------
+	
+INSERT INTO REAdb."DesiredFlat"("id_client","City","Hood","Street","Type","Area","Room","Floor","Status","Price") VALUES
+	(3,'Одесса', 'Приморский', NULL, 'Квартира', NULL, 2, NULL, 'После ремонта', NULL),
+	(5,'Одесса', NULL, NULL, 'Квартира', 60, NULL, NULL, 'Требуется ремонт', 20000);
+
+INSERT INTO REAdb."DesiredHouse"("id_client","City","Hood","Street","Type","Area","Room","NumberOfStoreys","Status","Price") VALUES
+	(6,'Одесса', 'Малиновский', NULL, 'Дом', 120, NULL, NULL, 'После ремонта', 263500),
+	(9,'Одесса', 'Киевский', NULL, 'Дом', NULL, NULL, 3, 'Требуется ремонт', NULL);
+
+INSERT INTO REAdb."DesiredPlot"("id_client","City","Hood","Street","Type","Area","Status","Price") VALUES
+	(4,'Одесса', 'Малиновский', 'Парковая', 'Участок', 3, 'Есть строения', NULL),
+	(4,'Одесса', 'Суворовский', 'Светлая', 'Участок', 5, 'Без строений', 340000);
+
+---------------------------------------------------------------------------------
+
+INSERT INTO REAdb."Contracts"("id_employee","id_object","id_client","id_owner","StartDate","FinishDate","ContractType","Price") VALUES
+	(1, 2, 2, 3, '04.10.2016', '04.10.2016', 'Продажа', 34000),
+	(3, 6, 8, 3, '01.09.2016', '04.10.2018', 'Аренда', 24300),
+	(7, 17, 1, 8, '20.07.2015', '20.07.2015', 'Продажа', 58000),
+	(11, 10, 7, 4, '01.05.2016', '01.09.2016', 'Аренда', 185000),
+	(9, 4, 3, 4, '30.10.2016', '01.11.2016', 'Продажа', 185000),
+	(4, 9, 1, 3, '01.02.2016', '02.04.2016', 'Аренда', 650000),
+	(9, 5, 2, 3, '28.04.2012', '30.04.2012', 'Продажа', 20000),
+	(12, 9, 2, 3, '01.05.2016', '02.11.2016', 'Аренда', 785500);

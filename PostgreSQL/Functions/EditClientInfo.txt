@@ -1,0 +1,20 @@
+﻿/*SELECT * FROM readb.edit_clientInfo ('test1', 'ТЕСТОВ', 'ТЕСТ', 'ТТЕСТОВИЧ', '+380 50 717 8191')*/
+CREATE OR REPLACE FUNCTION readb.edit_clientInfo ("login" TEXT,
+						"lastname" TEXT,
+						"firstname" TEXT,
+						"patronymic" TEXT,
+						"phonenumber" CHAR(16)) 
+RETURNS TABLE("log" TEXT)
+
+AS $$
+BEGIN
+	UPDATE readb."Clients"
+	SET    	"Name" = ROW("lastname", "firstname", "patronymic"),
+		"PhoneNumber" = "phonenumber"
+	WHERE "Login" = "login";
+
+	RETURN QUERY
+		SELECT "Login"
+		FROM readb."Clients";
+	END; 
+$$ LANGUAGE plpgsql;

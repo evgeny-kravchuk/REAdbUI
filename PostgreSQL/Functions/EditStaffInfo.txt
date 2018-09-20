@@ -1,0 +1,24 @@
+﻿/*SELECT * FROM readb.edit_staffInfo ('testSTAFF1', 'Сотруд', 'Наш', 'Большой', 'Женский', '14.12.1991', '+380 50 717 8881')*/
+CREATE OR REPLACE FUNCTION readb.edit_staffInfo ("login" TEXT,
+						"lastname" TEXT,
+						"firstname" TEXT,
+						"patronymic" TEXT,
+						"sex" readb.sex,
+						"dateofbirth" DATE,
+						"phonenumber" CHAR(16)) 
+RETURNS TABLE("log" TEXT)
+
+AS $$
+BEGIN
+	UPDATE readb."Staff"
+	SET    	"Name" = ROW("lastname", "firstname", "patronymic"),
+		"Sex" = "sex",
+		"DateOfBirth" = "dateofbirth",
+		"PhoneNumber" = "phonenumber"
+	WHERE "Login" = "login";
+
+	RETURN QUERY
+		SELECT "Login"
+		FROM readb."Staff";
+	END; 
+$$ LANGUAGE plpgsql;

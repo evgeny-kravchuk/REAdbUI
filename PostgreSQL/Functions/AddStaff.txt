@@ -1,0 +1,24 @@
+/*SELECT * FROM readb.add_staff ('test1', '111222', 'Тестов', 'Тест', 'Тестович','+380 50 171 8191')*/
+CREATE OR REPLACE FUNCTION readb.add_staff ("login" TEXT,
+				"password" TEXT,
+				"lastname" TEXT,
+				"firstname" TEXT,
+				"patronymic" TEXT,
+				"sex" readb.sex, 
+				"dateofbirth" DATE, 
+				"position" TEXT,
+				"phonenumber" CHAR(16)) 
+RETURNS TABLE("log" TEXT)
+
+AS $$
+BEGIN
+	INSERT INTO login."DBUsers" (Login, Passwd, Vacant) VALUES ("login", "password", 'cP/kazIB0rbTWKLBAK15xg==');
+
+	INSERT INTO readb."Staff" ("Login", "Name", "Sex", "DateOfBirth", "Position", "PhoneNumber") VALUES ("login", ROW("lastname", "firstname", "patronymic"), "sex", "dateofbirth", "position", "phonenumber");
+	
+	RETURN QUERY
+		SELECT 	"Login"
+		FROM	login."DBUsers" L, readb."Staff" C
+		WHERE 	C."Login" = L.Login;
+	END; 
+$$ LANGUAGE plpgsql;

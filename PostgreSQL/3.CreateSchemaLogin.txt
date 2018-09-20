@@ -1,0 +1,65 @@
+CREATE SCHEMA login AUTHORIZATION loginREA;
+
+GRANT ALL   ON SCHEMA login TO adminREA;
+GRANT ALL   ON SCHEMA login TO loginREA;
+GRANT USAGE ON SCHEMA login TO staffREA;
+GRANT USAGE ON SCHEMA login TO clientREA;
+
+CREATE TABLE login."DBUsers"
+(
+  Login 	TEXT	NOT NULL	PRIMARY KEY,
+  Passwd	TEXT  	NOT NULL,
+  Vacant	TEXT  	NOT NULL, 
+  UNIQUE (Login)
+);
+
+ALTER TABLE login."DBUsers"
+OWNER TO loginREA;
+GRANT ALL ON TABLE login."DBUsers" TO loginREA;
+GRANT ALL ON TABLE login."DBUsers" TO adminREA;
+
+GRANT SELECT, UPDATE ON TABLE login."DBUsers" TO staffREA;
+GRANT SELECT, UPDATE ON TABLE login."DBUsers" TO clientREA;
+
+INSERT INTO login."DBUsers" (Login, Passwd, Vacant) VALUES
+    ('admin','c31ac605793f580b386c0fb53f1b9775','GKzXQPUYmkLTWKLBAK15xg=='),
+    ('staff1','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff2','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff3','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff4','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff5','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff6','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff7','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff8','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff9','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff10','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff11','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff12','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff13','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('staff14','f35388feac9decb27b32bf87974aaf5b','cP/kazIB0rbTWKLBAK15xg=='),
+    ('client1','15504a590a2b98ea1a0b80c607f2c5e0','uPv8EKCkZahrf7Zb1AJIrg=='),
+    ('client2','15504a590a2b98ea1a0b80c607f2c5e0','uPv8EKCkZahrf7Zb1AJIrg=='),
+    ('client3','15504a590a2b98ea1a0b80c607f2c5e0','uPv8EKCkZahrf7Zb1AJIrg=='),
+    ('client4','15504a590a2b98ea1a0b80c607f2c5e0','uPv8EKCkZahrf7Zb1AJIrg=='),
+    ('client5','15504a590a2b98ea1a0b80c607f2c5e0','uPv8EKCkZahrf7Zb1AJIrg=='),
+    ('client6','15504a590a2b98ea1a0b80c607f2c5e0','uPv8EKCkZahrf7Zb1AJIrg=='),
+    ('client7','15504a590a2b98ea1a0b80c607f2c5e0','uPv8EKCkZahrf7Zb1AJIrg=='),
+    ('client8','15504a590a2b98ea1a0b80c607f2c5e0','uPv8EKCkZahrf7Zb1AJIrg=='),
+    ('client9','15504a590a2b98ea1a0b80c607f2c5e0','uPv8EKCkZahrf7Zb1AJIrg=='),
+    ('client10','15504a590a2b98ea1a0b80c607f2c5e0','uPv8EKCkZahrf7Zb1AJIrg==');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,20 @@
+/*SELECT * FROM readb.edit_clientLogin ('test2', 'test1')*/
+CREATE OR REPLACE FUNCTION readb.edit_clientLogin ("new_login" TEXT,
+						"old_login" TEXT) 
+RETURNS TABLE("log" TEXT)
+
+AS $$
+BEGIN
+	UPDATE login."DBUsers"
+	SET Login = "new_login"
+	WHERE Login = "old_login"; 
+
+	UPDATE readb."Clients"
+	SET    "Login" = "new_login"
+	WHERE  "Login" = "old_login";
+
+	RETURN QUERY
+		SELECT "Login"
+		FROM readb."Clients";
+	END; 
+$$ LANGUAGE plpgsql;

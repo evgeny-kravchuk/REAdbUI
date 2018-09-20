@@ -1,0 +1,21 @@
+﻿/*SELECT * FROM login.add_client ('test1', '111222', 'Тестов', 'Тест', 'Тестович','+380 50 171 8191')*/
+CREATE OR REPLACE FUNCTION login.add_client ("login" TEXT,
+				"passwd" TEXT,
+				"lastname" TEXT,
+				"firstname" TEXT,
+				"patronymic" TEXT,
+				"phonenumber" CHAR(16)) 
+RETURNS TABLE("log" TEXT)
+
+AS $$
+BEGIN
+	INSERT INTO login."DBUsers" (Login, Passwd, Vacant) VALUES ("login", "passwd", 'uPv8EKCkZahrf7Zb1AJIrg==');
+
+	INSERT INTO readb."Clients" ("Login", "Name", "PhoneNumber") VALUES ("login", ROW("lastname", "firstname", "patronymic"), "phonenumber");
+	
+	RETURN QUERY
+		SELECT 	"Login"
+		FROM	login."DBUsers" L, readb."Clients" C
+		WHERE 	C."Login" = L.Login;
+	END; 
+$$ LANGUAGE plpgsql;
