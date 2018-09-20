@@ -1,0 +1,11 @@
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\BusinessLogic\obj\Debug\BusinessLogic.csprojResolveAssemblyReference.cache
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\BusinessLogic\bin\Debug\BusinessLogic.dll
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\BusinessLogic\bin\Debug\BusinessLogic.pdb
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\BusinessLogic\bin\Debug\DatabaseLayer.dll
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\BusinessLogic\bin\Debug\Objects.dll
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\BusinessLogic\bin\Debug\Npgsql.dll
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\BusinessLogic\bin\Debug\DatabaseLayer.pdb
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\BusinessLogic\bin\Debug\Objects.pdb
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\BusinessLogic\bin\Debug\Npgsql.xml
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\BusinessLogic\obj\Debug\BusinessLogic.dll
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\BusinessLogic\obj\Debug\BusinessLogic.pdb
