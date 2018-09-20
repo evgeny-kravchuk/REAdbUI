@@ -1,0 +1,7 @@
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\Objects\bin\Debug\Objects.dll
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\Objects\bin\Debug\Objects.pdb
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\Objects\bin\Debug\Npgsql.dll
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\Objects\bin\Debug\Npgsql.xml
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\Objects\obj\Debug\Objects.csprojResolveAssemblyReference.cache
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\Objects\obj\Debug\Objects.dll
+E:\University\3_course\2_semester\DB\REA\Project\RealEstateAgency\Objects\obj\Debug\Objects.pdb
